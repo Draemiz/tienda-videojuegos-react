@@ -1,0 +1,365 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
+/* Fondo */
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #090b12;
+}
+
+.tabla-contenedor {
+  min-height: 100vh;
+  padding: 40px;
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  font-family: "Orbitron", sans-serif;
+
+  transition: 0.5s ease;
+}
+
+/* Header */
+
+.header {
+  margin-bottom: 35px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 700;
+
+  background: linear-gradient(90deg, #ffffff, #00d9ff);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitulo {
+  margin-top: 8px;
+  color: #7b8298;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+/* Titulo */
+
+.titulo-principal {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.icono-juego {
+  font-size: 2.8rem;
+
+  filter: none;
+
+  text-shadow: none;
+}
+
+.header h2 {
+  margin: 0;
+
+  font-size: 3rem;
+
+  font-weight: 700;
+
+  background: linear-gradient(
+    90deg,
+    #ffffff,
+    #00d9ff
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Tabla */
+
+.tabla-wrapper {
+  overflow-x: auto;
+}
+
+.tabla {
+  width: 100%;
+  min-width: 950px;
+
+  border-collapse: separate;
+  border-spacing: 0 14px;
+}
+
+/* Encabezados */
+
+.tabla thead th {
+  color: #6e7690;
+
+  font-size: 0.75rem;
+
+  text-transform: uppercase;
+
+  letter-spacing: 2px;
+
+  text-align: left;
+
+  padding: 12px 16px;
+}
+
+/* Filas */
+
+.tabla tbody tr {
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.tabla tbody tr:hover {
+  transform: translateY(-4px) scale(1.01);
+
+  box-shadow:
+    0 0 15px rgba(0, 217, 255, 0.2),
+    0 0 30px rgba(0, 217, 255, 0.08);
+}
+
+/* Celdas */
+
+.tabla td {
+  padding: 18px 16px;
+
+  color: #d5d8e0;
+
+  background: rgba(12, 16, 28, 0.82);
+
+  backdrop-filter: blur(12px);
+
+  border-top: 1px solid rgba(0, 217, 255, 0.15);
+  border-bottom: 1px solid rgba(0, 217, 255, 0.15);
+
+  vertical-align: middle;
+}
+
+.tabla td:first-child {
+  border-left: 1px solid rgba(0, 217, 255, 0.15);
+
+  border-radius: 14px 0 0 14px;
+}
+
+.tabla td:last-child {
+  border-right: 1px solid rgba(0, 217, 255, 0.15);
+
+  border-radius: 0 14px 14px 0;
+}
+
+/* Juego */
+
+.td-juego {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.juego-imagen {
+  width: 90px;
+  height: 55px;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  transition: 0.3s ease;
+}
+
+.tabla tbody tr:hover .juego-imagen {
+  transform: scale(1.08);
+
+  box-shadow:
+    0 0 12px rgba(0, 217, 255, 0.35);
+}
+
+.titulo-juego {
+  color: white;
+
+  font-size: 0.95rem;
+
+  font-weight: 600;
+
+  line-height: 1.4;
+}
+
+/* Genero */
+
+.badge-genero {
+  display: inline-block;
+
+  padding: 5px 12px;
+
+  border-radius: 20px;
+
+  background: rgba(123, 47, 255, 0.15);
+
+  border: 1px solid rgba(123, 47, 255, 0.3);
+
+  color: #a87cff;
+
+  font-size: 0.8rem;
+
+  font-weight: 600;
+}
+
+/* Plataforma */
+
+.plataforma {
+  color: #9aa3b5;
+  font-size: 0.85rem;
+}
+
+/* Año */
+
+.anio {
+  color: #9aa3b5;
+  font-size: 0.9rem;
+}
+
+/* Precio */
+
+.precio {
+  color: #00eaff;
+
+  font-size: 1.1rem;
+
+  font-weight: 700;
+
+  text-shadow:
+    0 0 8px rgba(0, 234, 255, 0.4);
+}
+
+/* Disponible */
+
+.disponible {
+  display: inline-block;
+
+  padding: 6px 12px;
+
+  border-radius: 8px;
+
+  background: rgba(0, 255, 136, 0.12);
+
+  border: 1px solid rgba(0, 255, 136, 0.25);
+
+  color: #00ff88;
+
+  font-size: 0.8rem;
+
+  font-weight: 700;
+}
+
+/* No disponible */
+
+.no-disponible {
+  display: inline-block;
+
+  padding: 6px 12px;
+
+  border-radius: 8px;
+
+  background: rgba(255, 0, 102, 0.12);
+
+  border: 1px solid rgba(255, 0, 102, 0.25);
+
+  color: #ff4d73;
+
+  font-size: 0.8rem;
+
+  font-weight: 700;
+}
+
+/* Progreso */
+
+.progreso-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+progress {
+  width: 130px;
+  height: 8px;
+
+  border: none;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+progress::-webkit-progress-bar {
+  background: #1f2535;
+}
+
+progress::-webkit-progress-value {
+  background: linear-gradient(
+    90deg,
+    #00d9ff,
+    #7b2fff
+  );
+
+  box-shadow:
+    0 0 8px rgba(0,217,255,0.5);
+}
+
+progress::-moz-progress-bar {
+  background: linear-gradient(
+    90deg,
+    #00d9ff,
+    #7b2fff
+  );
+}
+
+.porcentaje {
+  color: #00d9ff;
+
+  font-size: 0.85rem;
+
+  font-weight: 700;
+
+  min-width: 40px;
+}
+
+/* Scroll */
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #10131d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00d9ff;
+  border-radius: 10px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+
+  .tabla-contenedor {
+    padding: 20px;
+  }
+
+  .header h2 {
+    font-size: 1.8rem;
+  }
+
+  .tabla {
+    min-width: 950px;
+  }
+
+}
