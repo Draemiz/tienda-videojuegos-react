@@ -32,7 +32,7 @@ const videojuegos = [
     plataforma: "PC / PS5 / Xbox",
     lanzamiento: 2020,
     precio: 39.99,
-    disponible: true,
+    disponible: false,
     progreso: 0.60,
     imagen: "https://wallpapers.com/images/hd/cyberpunk-2077-s-megacity-5120x1440-gaming-orf4szuc1q3lmad5.jpg",
     trailer: "https://www.youtube.com/embed/8X2kIfS6fb8",

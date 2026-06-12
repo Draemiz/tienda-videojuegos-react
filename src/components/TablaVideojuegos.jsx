@@ -14,11 +14,13 @@ const colorPorId = {
   5: "from-amber-600 to-orange-900",
 };
 
-export default function TablaVideojuegos({ videojuegos }) {
+export default function TablaVideojuegos({ videojuegos, onEliminar, onEditar }) {
   const [activeView, setActiveView] = useState('home');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const activeGame = videojuegos.find(g => g.id === activeView);
+  const juegosDisponibles = videojuegos.filter(j => j.disponible).length;
+  const juegosAgotados = videojuegos.length - juegosDisponibles;
 
   const handleNavClick = (viewId) => {
     setActiveView(viewId);
@@ -64,35 +66,32 @@ export default function TablaVideojuegos({ videojuegos }) {
 
           <button
             onClick={() => handleNavClick('home')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-              activeView === 'home'
-                ? 'bg-cyan-500/10 text-cyan-400 font-medium'
-                : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
-            }`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'home'
+              ? 'bg-cyan-500/10 text-cyan-400 font-medium'
+              : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+              }`}
           >
             <Home size={20} /> Inicio
           </button>
 
-          <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6">Mis Videojuegos</p>
+          <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6">Mi Biblioteca</p>
 
           {videojuegos.map((juego) => (
             <button
               key={juego.id}
               onClick={() => handleNavClick(juego.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group ${
-                activeView === juego.id
-                  ? 'bg-slate-800 border border-slate-700/50'
-                  : 'hover:bg-slate-800/30 border border-transparent'
-              }`}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group ${activeView === juego.id
+                ? 'bg-slate-800 border border-slate-700/50'
+                : 'hover:bg-slate-800/30 border border-transparent'
+                }`}
             >
               <img
                 src={juego.imagen}
                 alt={juego.titulo}
                 className="w-10 h-10 rounded-lg object-cover border border-slate-700/50"
               />
-              <span className={`text-sm text-left line-clamp-2 leading-tight ${
-                activeView === juego.id ? 'text-white font-medium' : 'text-slate-400'
-              }`}>
+              <span className={`text-sm text-left line-clamp-2 leading-tight ${activeView === juego.id ? 'text-white font-medium' : 'text-slate-400'
+                }`}>
                 {juego.titulo}
               </span>
             </button>
@@ -124,74 +123,90 @@ export default function TablaVideojuegos({ videojuegos }) {
                   Tienda de Videojuegos
                   <Sparkles className="text-cyan-400" size={28} />
                 </h2>
-                <p className="text-slate-400">
-                  {videojuegos.length} juegos en tu biblioteca
-                </p>
+                <div className="space-y-1">
+                  <p className="text-slate-400">
+                    {videojuegos.length} juegos en tu biblioteca
+                  </p>
+
+                  <p className="text-sm text-slate-500">
+                    {juegosDisponibles} disponibles • {juegosAgotados} agotados
+                  </p>
+                </div>
               </div>
 
-              <div className="bg-[#111827]/80 rounded-3xl border border-slate-800/50 overflow-hidden shadow-2xl">
-                <div className="hidden md:grid grid-cols-12 gap-4 p-6 border-b border-slate-800/50 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                  <div className="col-span-4">Juego</div>
-                  <div className="col-span-2">Género / Plataforma</div>
-                  <div className="col-span-2">Precio</div>
-                  <div className="col-span-2">Estado</div>
-                  <div className="col-span-2">Progreso</div>
-                </div>
-
-                <div className="divide-y divide-slate-800/50">
-                  {videojuegos.map((juego) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {videojuegos.map((juego) => (
+                  <div
+                    key={juego.id}
+                    className="bg-[#111827] border border-slate-800/60 rounded-2xl overflow-hidden hover:border-cyan-500/30 transition-colors group"
+                  >
+                    {/* Imagen */}
                     <div
-                      key={juego.id}
+                      className="relative h-40 cursor-pointer overflow-hidden"
                       onClick={() => handleNavClick(juego.id)}
-                      className="group flex flex-col md:grid md:grid-cols-12 gap-4 p-4 md:p-6 items-center hover:bg-slate-800/30 transition-colors cursor-pointer"
                     >
-                      <div className="col-span-4 flex items-center gap-4 w-full">
-                        <img src={juego.imagen} alt={juego.titulo} className="w-16 h-16 rounded-xl object-cover shadow-lg group-hover:scale-105 transition-transform" />
-                        <div>
-                          <h3 className="text-white font-semibold group-hover:text-cyan-400 transition-colors line-clamp-1">{juego.titulo}</h3>
-                          <p className="text-sm text-slate-500">{juego.lanzamiento}</p>
-                        </div>
-                      </div>
-
-                      <div className="col-span-2 w-full md:w-auto flex justify-between md:block text-sm">
-                        <span className="md:hidden text-slate-500">Info:</span>
-                        <div>
-                          <p className="text-slate-300">{juego.genero}</p>
-                          <p className="text-slate-500 text-xs">{juego.plataforma}</p>
-                        </div>
-                      </div>
-
-                      <div className="col-span-2 w-full md:w-auto flex justify-between md:block font-medium">
-                        <span className="md:hidden text-slate-500">Precio:</span>
-                        <span className="text-white">${juego.precio}</span>
-                      </div>
-
-                      <div className="col-span-2 w-full md:w-auto flex justify-between md:block">
-                        <span className="md:hidden text-slate-500">Estado:</span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                          juego.disponible
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                      <img
+                        src={juego.imagen}
+                        alt={juego.titulo}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-transparent to-transparent" />
+                      <span className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold ${juego.disponible
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
                         }`}>
-                          {juego.disponible ? 'ONLINE' : 'AGOTADO'}
-                        </span>
+                        {juego.disponible ? 'ONLINE' : 'AGOTADO'}
+                      </span>
+                    </div>
+
+                    {/* Info */}
+                    <div className="p-5 space-y-3">
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => handleNavClick(juego.id)}
+                      >
+                        <h3 className="text-white font-semibold group-hover:text-cyan-400 transition-colors line-clamp-1">
+                          {juego.titulo}
+                        </h3>
+                        <p className="text-sm text-slate-500">
+                          {juego.genero} · {juego.plataforma} · {juego.lanzamiento}
+                        </p>
                       </div>
 
-                      <div className="col-span-2 w-full flex items-center gap-3">
-                        <span className="md:hidden text-slate-500 text-sm">Progreso:</span>
+                      {/* Progreso */}
+                      <div className="flex items-center gap-3">
                         <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden">
                           <div
                             className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
                             style={{ width: `${Math.round(juego.progreso * 100)}%` }}
                           />
                         </div>
-                        <span className="text-xs font-bold text-slate-300 w-8">
+                        <span className="text-xs font-bold text-slate-300 w-10 text-right">
                           {Math.round(juego.progreso * 100)}%
                         </span>
                       </div>
+
+                      {/* Precio + Acciones */}
+                      <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+                        <span className="text-white font-bold text-lg">${juego.precio}</span>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => onEditar(juego)}
+                            className="px-3 py-1.5 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-lg text-xs font-bold hover:bg-cyan-500/20 transition-colors"
+                          >
+                            ✏️ Editar
+                          </button>
+                          <button
+                            onClick={() => onEliminar(juego.id)}
+                            className="px-3 py-1.5 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-lg text-xs font-bold hover:bg-rose-500/20 transition-colors"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
@@ -213,7 +228,7 @@ export default function TablaVideojuegos({ videojuegos }) {
               {/* Banner */}
               <div className={`relative w-full h-64 md:h-80 rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br ${colorPorId[activeGame.id]} p-8 flex flex-col justify-end`}>
                 <div
-                  className="absolute inset-0 bg-cover bg-center opacity-60"
+                  className="absolute inset-0 bg-cover bg-center opacity-90"
                   style={{ backgroundImage: `url(${activeGame.imagen})` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/40 to-transparent" />
@@ -264,11 +279,10 @@ export default function TablaVideojuegos({ videojuegos }) {
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Estado</p>
-                    <span className={`inline-block px-3 py-1 rounded-lg text-sm font-bold ${
-                      activeGame.disponible
-                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                        : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                    }`}>
+                    <span className={`inline-block px-3 py-1 rounded-lg text-sm font-bold ${activeGame.disponible
+                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                      : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                      }`}>
                       {activeGame.disponible ? 'ONLINE' : 'AGOTADO'}
                     </span>
                   </div>
@@ -315,7 +329,7 @@ export default function TablaVideojuegos({ videojuegos }) {
                   <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">
                     📖 Descripción
                   </p>
-                  <p className="text-slate-300 leading-relaxed text-base">
+                  <p className="text-slate-300 leading-8 text-base">
                     {activeGame.descripcion}
                   </p>
                   <div className="flex flex-wrap gap-2 mt-2">
