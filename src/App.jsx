@@ -1,40 +1,70 @@
 import { useState } from 'react';
-import videojuegos from './data/videojuegos';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import videojuegosIniciales from './data/videojuegos';
 import TablaVideojuegos from './components/TablaVideojuegos';
+import FormularioVideojuego from './components/FormularioVideojuego';
+import Navbar from './components/Navbar';
+import PaginaNoEncontrada from './components/PaginaNoEncontrada';
 
-function App() {
-  const [listaVideojuegos, setListaVideojuegos] =
-    useState(videojuegos);
+function AppContenido() {
+  const [videojuegos, setVideojuegos] = useState(videojuegosIniciales);
+  const navigate = useNavigate();
 
-  const eliminarVideojuego = (id) => {
-    const nuevaLista = listaVideojuegos.filter( juego => juego.id !== id);
-    setListaVideojuegos(nuevaLista);
+  // Agregar un nuevo videojuego
+  const agregar = (nuevoJuego) => {
+    const nuevoId = videojuegos.length > 0 
+      ? Math.max(...videojuegos.map(j => j.id)) + 1 
+      : 1;
+    setVideojuegos([...videojuegos, { ...nuevoJuego, id: nuevoId }]);
+    navigate('/');
   };
 
-  const agregarVideojuego = (nuevoJuego) => { setListaVideojuegos([...listaVideojuegos, nuevoJuego
-    ]);
+  // Eliminar un videojuego por id
+  const eliminar = (id) => {
+    setVideojuegos(videojuegos.filter(j => j.id !== id));
   };
 
-  const editarVideojuego = (juegoActualizado) => {
-    const nuevaLista = listaVideojuegos.map((juego) =>
-        juego.id === juegoActualizado.id
-          ? juegoActualizado
-          : juego
-
-      );
-
-    setListaVideojuegos(nuevaLista);
-
+  // Editar un videojuego existente
+  const editar = (juegoEditado) => {
+    setVideojuegos(videojuegos.map(j => 
+      j.id === juegoEditado.id ? juegoEditado : j
+    ));
+    navigate('/');
   };
 
   return (
-    <div>
-      <TablaVideojuegos
-        videojuegos={listaVideojuegos}
-        onEliminar={eliminarVideojuego}
-        onEditar={editarVideojuego}
-      />
-    </div>
+    <>
+      <Navbar />
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <TablaVideojuegos 
+              videojuegos={videojuegos} 
+              onEliminar={eliminar}
+              onEditar={(juego) => navigate('/editar', { state: juego })}
+            />
+          } 
+        />
+        <Route 
+          path="/nuevo" 
+          element={<FormularioVideojuego onGuardar={agregar} />} 
+        />
+        <Route 
+          path="/editar" 
+          element={<FormularioVideojuego onGuardar={editar} modoEdicion={true} />} 
+        />
+        <Route path="*" element={<PaginaNoEncontrada />} />
+      </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContenido />
+    </BrowserRouter>
   );
 }
 

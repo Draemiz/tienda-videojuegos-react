@@ -1,0 +1,305 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#050b1f;
+  font-family:"Orbitron",sans-serif;
+}
+
+/* Contenedor principal */
+
+.formulario-page{
+
+  min-height:calc(100vh - 70px);
+
+  background:
+    radial-gradient(circle at top left,
+      rgba(0,217,255,.12),
+      transparent 35%),
+    radial-gradient(circle at bottom right,
+      rgba(123,47,255,.15),
+      transparent 35%),
+    #050b1f;
+
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+
+  padding:100px 10px 10px;
+}
+
+/* Layout */
+
+.formulario-layout{
+
+  width:100%;
+  max-width:1180px;
+
+  display:grid;
+  grid-template-columns:.75fr 1fr;
+
+  border-radius:24px;
+  overflow:hidden;
+  background:rgba(8,15,35,.95);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(20px);
+
+  box-shadow:
+    0 0 30px rgba(0,217,255,.08),
+    0 0 60px rgba(123,47,255,.05);
+}
+
+/* Banner */
+
+.banner-panel{
+  position:relative;
+  min-height:520px;
+  overflow:hidden;
+}
+
+.preview-banner{
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  position:absolute;
+  inset:0;
+}
+
+.banner-panel::after{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(5,11,31,.95),
+      rgba(5,11,31,.25)
+    );
+}
+
+/* Logo */
+
+.logo-panel{
+
+  position:absolute;
+
+  top:25px;
+  left:25px;
+
+  z-index:10;
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo-icono{
+
+  width:55px;
+  height:55px;
+
+  border-radius:16px;
+
+  background:rgba(0,217,255,.12);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:1.3rem;
+}
+
+.logo-panel h2{
+
+  margin:0;
+  color:white;
+  font-size:1.7rem;
+}
+
+.logo-panel span{
+  color:#00d9ff;
+}
+
+/* Información banner */
+
+.banner-info{
+  position:absolute;
+
+  left:25px;
+  right:25px;
+  bottom:25px;
+
+  z-index:10;
+}
+
+.banner-info h3{
+  color:white;
+  margin:0 0 8px;
+  font-size:1.1rem;
+}
+
+.banner-info p{
+  margin:0;
+  color:#9ca7c4;
+  font-size:.85rem;
+}
+
+/* Formulario */
+
+.form-panel{
+  padding:28px;
+}
+
+.form-panel h1{
+
+  color:white;
+  margin:0 0 20px;
+  font-size:2rem;
+  font-weight:600;
+}
+
+/* Grid */
+
+.formulario-grid{
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.campo{
+  display:flex;
+  flex-direction:column;
+}
+
+.campo label{
+
+  color:#93a0c0;
+  font-size:.65rem;
+  margin-bottom:6px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.campo input,
+.campo select,
+.campo textarea{
+
+  width:100%;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  padding:10px 12px;
+  color:white;
+  font-size:.8rem;
+  font-family:inherit;
+  transition:.3s;
+}
+
+.campo select option{
+  background:#0f172a;
+  color:white;
+}
+
+.campo textarea{
+  resize:none;
+  min-height:90px;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus{
+
+  outline:none;
+  border-color:#00d9ff;
+  box-shadow:
+    0 0 10px rgba(0,217,255,.25);
+}
+
+/* Descripción */
+
+.descripcion-completa{
+  grid-column:1 / -1;
+}
+
+/* Disponible */
+
+.checkbox-container{
+
+  grid-column:1 / -1;
+  display:flex;
+  align-items:center;
+  color:white;
+  font-size:.85rem;
+}
+
+/* Botón */
+
+.btn-guardar{
+  grid-column:1 / -1;
+  border:none;
+  padding:14px;
+  border-radius:12px;
+  background:#19c3ea;
+  color:#08111f;
+  font-family:inherit;
+  font-size:.9rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.btn-guardar:hover{
+  background:#27d5ff;
+  transform:translateY(-2px);
+  box-shadow:
+    0 0 15px rgba(25,195,234,.35);
+}
+
+/* Responsive */
+
+@media(max-width:1100px){
+
+  .formulario-layout{
+    grid-template-columns:1fr;
+  }
+
+  .banner-panel{
+    min-height:250px;
+  }
+}
+
+@media(max-width:768px){
+
+  .formulario-page{
+    padding:10px;
+  }
+
+  .form-panel{
+
+    padding:20px;
+  }
+
+  .form-panel h1{
+    font-size:1.7rem;
+  }
+
+  .formulario-grid{
+    grid-template-columns:1fr;
+  }
+
+  .descripcion-completa,
+  .checkbox-container,
+  .btn-guardar{
+    grid-column:auto;
+  }
+}
