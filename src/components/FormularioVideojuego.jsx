@@ -231,7 +231,9 @@ function FormularioVideojuego({ onGuardar }) {
                                 <option value="Acción">
                                     Acción
                                 </option>
-
+                                <option value="Metroidvania">
+                                    Metroidvania
+                                </option>
                                 <option value="Carreras">
                                     Carreras
                                 </option>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import videojuegosIniciales from './data/videojuegos';
 import TablaVideojuegos from './components/TablaVideojuegos';
@@ -7,13 +7,24 @@ import Navbar from './components/Navbar';
 import PaginaNoEncontrada from './components/PaginaNoEncontrada';
 
 function AppContenido() {
-  const [videojuegos, setVideojuegos] = useState(videojuegosIniciales);
+  const [videojuegos, setVideojuegos] = useState(() => {
+    const datosGuardados = localStorage.getItem("lista_videojuegos");
+    return datosGuardados ? JSON.parse(datosGuardados) : videojuegosIniciales;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      "lista_videojuegos",
+      JSON.stringify(videojuegos)
+    );
+  }, [videojuegos]);
+
   const navigate = useNavigate();
 
   // Agregar un nuevo videojuego
   const agregar = (nuevoJuego) => {
-    const nuevoId = videojuegos.length > 0 
-      ? Math.max(...videojuegos.map(j => j.id)) + 1 
+    const nuevoId = videojuegos.length > 0
+      ? Math.max(...videojuegos.map(j => j.id)) + 1
       : 1;
     setVideojuegos([...videojuegos, { ...nuevoJuego, id: nuevoId }]);
     navigate('/');
@@ -26,7 +37,7 @@ function AppContenido() {
 
   // Editar un videojuego existente
   const editar = (juegoEditado) => {
-    setVideojuegos(videojuegos.map(j => 
+    setVideojuegos(videojuegos.map(j =>
       j.id === juegoEditado.id ? juegoEditado : j
     ));
     navigate('/');
@@ -36,23 +47,23 @@ function AppContenido() {
     <>
       <Navbar />
       <Routes>
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
-            <TablaVideojuegos 
-              videojuegos={videojuegos} 
+            <TablaVideojuegos
+              videojuegos={videojuegos}
               onEliminar={eliminar}
               onEditar={(juego) => navigate('/editar', { state: juego })}
             />
-          } 
+          }
         />
-        <Route 
-          path="/nuevo" 
-          element={<FormularioVideojuego onGuardar={agregar} />} 
+        <Route
+          path="/nuevo"
+          element={<FormularioVideojuego onGuardar={agregar} />}
         />
-        <Route 
-          path="/editar" 
-          element={<FormularioVideojuego onGuardar={editar} modoEdicion={true} />} 
+        <Route
+          path="/editar"
+          element={<FormularioVideojuego onGuardar={editar} modoEdicion={true} />}
         />
         <Route path="*" element={<PaginaNoEncontrada />} />
       </Routes>
