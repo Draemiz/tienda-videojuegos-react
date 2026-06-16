@@ -303,3 +303,17 @@ body{
     grid-column:auto;
   }
 }
+
+.error-mensaje {
+    color: #ff4d4f;
+    font-size: 0.75rem;
+    margin-top: 4px;
+    display: block;
+}
+
+.contador-caracteres {
+    color: #6b7280;
+    font-size: 0.7rem;
+    text-align: right;
+    margin-top: 2px;
+}

@@ -19,24 +19,28 @@ function FormularioVideojuego({ onGuardar }) {
     const [imagenActual, setImagenActual] = useState(0);
 
     const [formulario, setFormulario] = useState(
-    juegoAEditar 
-      ? {
-          ...juegoAEditar,
-          progreso: Math.round(juegoAEditar.progreso * 100)
-        }
-      : {
-          titulo: "",
-          genero: "",
-          plataforma: "",
-          lanzamiento: "",
-          precio: "",
-          progreso: "",
-          imagen: "",
-          trailer: "",
-          descripcion: "",
-          disponible: true
-        }
-);
+        juegoAEditar
+            ? {
+                ...juegoAEditar,
+                progreso: Math.round(juegoAEditar.progreso * 100)
+            }
+            : {
+                titulo: "",
+                genero: "",
+                plataforma: "",
+                lanzamiento: "",
+                precio: "",
+                progreso: "",
+                imagen: "",
+                trailer: "",
+                descripcion: "",
+                disponible: true,
+                fechaLanzamiento: "",
+                calificacion: ""
+            }
+    );
+
+    const [errores, setErrores] = useState({});
 
     useEffect(() => {
 
@@ -64,18 +68,86 @@ function FormularioVideojuego({ onGuardar }) {
         });
     };
 
-    const manejarSubmit = (e) => {
-    e.preventDefault();
+    const validarFormulario = () => {
 
-    const juegoFinal = {
-        ...formulario,
-        precio: parseFloat(formulario.precio),
-        lanzamiento: parseInt(formulario.lanzamiento),
-        progreso: parseFloat(formulario.progreso) / 100
+        const erroresEncontrados = {};
+
+        // 1. El título no puede estar vacío ni contener solo espacios
+        if (!formulario.titulo.trim()) {
+            erroresEncontrados.titulo = "El título no puede estar vacío.";
+        }
+
+        // 2. El género debe estar seleccionado
+        if (!formulario.genero) {
+            erroresEncontrados.genero = "Debes seleccionar un género.";
+        }
+
+        // 3. La plataforma no puede estar vacía
+        if (!formulario.plataforma.trim()) {
+            erroresEncontrados.plataforma = "La plataforma no puede estar vacía.";
+        }
+
+        // 4. El precio debe ser un número mayor a 0
+        if (!formulario.precio || parseFloat(formulario.precio) <= 0) {
+            erroresEncontrados.precio = "El precio debe ser mayor a 0.";
+        }
+
+        // 5. La sinopsis debe tener entre 10 y 250 caracteres
+        const longitudDescripcion = formulario.descripcion.trim().length;
+        if (longitudDescripcion < 10) {
+            erroresEncontrados.descripcion = "La sinopsis debe tener al menos 10 caracteres.";
+        } else if (longitudDescripcion > 250) {
+            erroresEncontrados.descripcion = "La sinopsis no puede superar los 250 caracteres.";
+        }
+
+        // 6. La calificación debe estar entre 1 y 100
+        const calificacionNum = Number(formulario.calificacion);
+        if (
+            formulario.calificacion === "" ||
+            isNaN(calificacionNum) ||
+            calificacionNum < 1 ||
+            calificacionNum > 100
+        ) {
+            erroresEncontrados.calificacion = "La calificación debe estar entre 1 y 100.";
+        }
+
+        // 7. La fecha de lanzamiento no puede ser futura
+        if (!formulario.fechaLanzamiento) {
+            erroresEncontrados.fechaLanzamiento = "Debes seleccionar una fecha de lanzamiento.";
+        } else {
+            const hoy = new Date().toISOString().split("T")[0];
+            if (formulario.fechaLanzamiento > hoy) {
+                erroresEncontrados.fechaLanzamiento = "La fecha no puede ser futura.";
+            }
+        }
+
+        return erroresEncontrados;
     };
 
-    onGuardar(juegoFinal);
-};
+    const manejarSubmit = (e) => {
+        e.preventDefault();
+
+        const erroresActivos = validarFormulario();
+
+        if (Object.keys(erroresActivos).length > 0) {
+            setErrores(erroresActivos);
+            return;
+        }
+
+        setErrores({});
+
+        const juegoFinal = {
+            ...formulario,
+            precio: parseFloat(formulario.precio),
+            lanzamiento: parseInt(formulario.lanzamiento),
+            progreso: parseFloat(formulario.progreso) / 100,
+            calificacion: parseFloat(formulario.calificacion)
+        };
+
+        onGuardar(juegoFinal);
+    };
+
+    const fechaHoy = new Date().toISOString().split("T")[0];
 
     return (
         <div className="formulario-page">
@@ -130,6 +202,10 @@ function FormularioVideojuego({ onGuardar }) {
                                 value={formulario.titulo}
                                 onChange={manejarCambio}
                             />
+
+                            {errores.titulo && (
+                                <span className="error-mensaje">{errores.titulo}</span>
+                            )}
                         </div>
 
                         <div className="campo">
@@ -160,6 +236,11 @@ function FormularioVideojuego({ onGuardar }) {
                                     Carreras
                                 </option>
                             </select>
+
+                            {errores.genero && (
+                                <span className="error-mensaje">{errores.genero}</span>
+                            )}
+
                         </div>
 
                         <div className="campo">
@@ -171,6 +252,11 @@ function FormularioVideojuego({ onGuardar }) {
                                 value={formulario.plataforma}
                                 onChange={manejarCambio}
                             />
+
+                            {errores.plataforma && (
+                                <span className="error-mensaje">{errores.plataforma}</span>
+                            )}
+
                         </div>
 
                         <div className="campo">
@@ -184,6 +270,41 @@ function FormularioVideojuego({ onGuardar }) {
                             />
                         </div>
 
+                        {/* Fecha de Lanzamiento */}
+                        <div className="campo">
+                            <label>Fecha de Lanzamiento</label>
+
+                            <input
+                                type="date"
+                                name="fechaLanzamiento"
+                                value={formulario.fechaLanzamiento}
+                                onChange={manejarCambio}
+                                max={fechaHoy}
+                            />
+
+                            {errores.fechaLanzamiento && (
+                                <span className="error-mensaje">{errores.fechaLanzamiento}</span>
+                            )}
+                        </div>
+
+                        {/* Calificación de la Crítica */}
+                        <div className="campo">
+                            <label>Calificación de la Crítica (1-100)</label>
+
+                            <input
+                                type="number"
+                                name="calificacion"
+                                min="1"
+                                max="100"
+                                value={formulario.calificacion}
+                                onChange={manejarCambio}
+                            />
+
+                            {errores.calificacion && (
+                                <span className="error-mensaje">{errores.calificacion}</span>
+                            )}
+                        </div>
+
                         <div className="campo">
                             <label>Precio</label>
 
@@ -194,6 +315,11 @@ function FormularioVideojuego({ onGuardar }) {
                                 value={formulario.precio}
                                 onChange={manejarCambio}
                             />
+
+                            {errores.precio && (
+                                <span className="error-mensaje">{errores.precio}</span>
+                            )}
+
                         </div>
 
                         <div className="campo">
@@ -233,14 +359,23 @@ function FormularioVideojuego({ onGuardar }) {
 
                         <div className="campo descripcion-completa">
 
-                            <label>Descripción</label>
+                            <label>Sinopsis</label>
 
                             <textarea
                                 rows="4"
                                 name="descripcion"
                                 value={formulario.descripcion}
                                 onChange={manejarCambio}
+                                maxLength="250"
                             />
+
+                            <span className="contador-caracteres">
+                                {formulario.descripcion.length}/250 caracteres
+                            </span>
+
+                            {errores.descripcion && (
+                                <span className="error-mensaje">{errores.descripcion}</span>
+                            )}
 
                         </div>
 
